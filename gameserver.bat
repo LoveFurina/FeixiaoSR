@@ -1,0 +1,1 @@
+start zig build run-gameserver
