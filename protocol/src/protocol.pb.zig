@@ -12875,9 +12875,9 @@ pub const Vector = struct {
     x: i32 = 0,
 
     pub const _desc_table = .{
-        .y = fd(15, .{ .Varint = .Simple }),
-        .z = fd(10, .{ .Varint = .Simple }),
-        .x = fd(6, .{ .Varint = .Simple }),
+        .y = fd(15, .{ .Varint = .ZigZagOptimized }),
+        .z = fd(10, .{ .Varint = .ZigZagOptimized }),
+        .x = fd(6, .{ .Varint = .ZigZagOptimized }),
     };
 
     pub usingnamespace protobuf.MessageMixins(@This());
@@ -34236,26 +34236,26 @@ pub const NPFBNEDBOPE = struct {
 
 pub const SceneInfo = struct {
     client_pos_version: u32 = 0,
-    lighten_section_list: ArrayList(u32),
-    entity_group_list: ArrayList(SceneEntityGroupInfo),
+    world_id: u32 = 0,
+    plane_id: u32 = 0,
     CPGDHGKAHHD: u32 = 0,
     floor_id: u32 = 0,
-    KHCAJKJEFEM: ArrayList(BuffInfo),
-    JMNPJIPLDJL: ArrayList(EntityBuffInfo),
     entry_id: u32 = 0,
-    GGGGAFKGNGH: ?NPFBNEDBOPE = null,
-    group_state_list: ArrayList(SceneGroupState),
-    PBKKPKGOBOK: ArrayList(PBKKPKGOBOKEntry),
     leader_entity_id: u32 = 0,
-    entity_list: ArrayList(SceneEntityInfo),
     dimension_id: u32 = 0,
     group_id_list: ArrayList(u32),
     game_mode_type: u32 = 0,
     map_entry_id: u32 = 0,
+    lighten_section_list: ArrayList(u32),
+    entity_group_list: ArrayList(SceneEntityGroupInfo),
+    KHCAJKJEFEM: ArrayList(BuffInfo),
+    JMNPJIPLDJL: ArrayList(EntityBuffInfo),
+    GGGGAFKGNGH: ?NPFBNEDBOPE = null,
+    group_state_list: ArrayList(SceneGroupState),
+    PBKKPKGOBOK: ArrayList(PBKKPKGOBOKEntry),
+    entity_list: ArrayList(SceneEntityInfo),
     OFDCKKDHIME: ArrayList(CCMDPDFFMKD),
     LFFPPBPNOAC: ArrayList(LFFPPBPNOACEntry),
-    world_id: u32 = 0,
-    plane_id: u32 = 0,
 
     pub const _desc_table = .{
         .client_pos_version = fd(12, .{ .Varint = .Simple }),

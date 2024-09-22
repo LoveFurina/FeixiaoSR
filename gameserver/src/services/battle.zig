@@ -11,6 +11,8 @@ pub fn onStartCocoonStage(session: *Session, packet: *const Packet, allocator: A
     const req = try packet.getProto(protocol.StartCocoonStageCsReq, allocator);
 
     const config = try Config.configLoader(allocator, "config.json");
+    
+    const BattleBuff = protocol.BattleBuff;
 
     var battle = protocol.SceneBattleInfo.init(allocator);
 
@@ -51,21 +53,66 @@ pub fn onStartCocoonStage(session: *Session, packet: *const Packet, allocator: A
             const talent = protocol.AvatarSkillTree{ .point_id = avatar.id * 1000 + elem, .level = talentLevel };
             try avatar.skilltree_list.append(talent);
         }
-        // enable technique
-        if (avatarConf.use_technique) {
-            var targetIndexList = ArrayList(u32).init(allocator);
-            try targetIndexList.append(0);
-            var buff = protocol.BattleBuff{
-                .id = 121401,
-                .level = 1,
-                .owner_id = @intCast(idx),
-                .wave_flag = 1,
-                .target_index_list = targetIndexList,
-                .dynamic_values = ArrayList(protocol.BattleBuff.DynamicValuesEntry).init(allocator),
-            };
-            try buff.dynamic_values.append(.{ .key = .{ .Const = "SkillIndex" }, .value = 0 });
-            try battle.buff_list.append(buff);
-        }
+        
+		// enable technique
+		if (avatarConf.use_technique) {
+			std.debug.print("{} is using tech\n", .{avatar.id});
+			var targetIndexList = ArrayList(u32).init(allocator);
+			try targetIndexList.append(0);
+			
+			const buffs_unlocked = &[_]u32{100101, 100201, 100301, 100401, 100501, 100601, 100801, 100901, 101301, 110101, 110201, 110202, 110203, 110301, 110401, 110501, 110601, 110701, 110801, 110901, 111001, 111101, 111201, 120101, 120301, 120401, 120501, 120601, 120701, 120702, 120801, 120802, 120901, 121001, 121101, 121201, 121202, 121203, 121301, 121302, 121303, 121401, 121501, 121701, 121801, 122001, 122002, 122003, 122004, 122101, 122201, 122301, 122302, 122303, 122304, 122401, 122402, 122403, 130101, 130201, 130301, 130302, 130303, 130401, 130402, 130403, 130404, 130405, 130406, 130501, 130601, 130602, 130701, 130801, 130802, 130803, 130901, 130902, 130903, 131001, 131002, 131201, 131401, 131501, 131502, 131503, 131701, 131702, 800301, 800501};
+			
+			var buffedAvatarId = avatar.id;
+			if (avatar.id == 8004) {
+				buffedAvatarId = 8003;
+			} else if (avatar.id == 8006) {
+				buffedAvatarId = 8005;
+			}
+			
+			for (buffs_unlocked) |buffId| {
+            const idPrefix = buffId / 100;
+				if (idPrefix == buffedAvatarId) {
+					std.debug.print("loading buffID {} for {}\n", .{buffId, buffedAvatarId});
+					var buff = BattleBuff{
+						.id = buffId,
+						.level = 1,
+						.owner_id = @intCast(idx),
+						.wave_flag = 1,
+						.target_index_list = targetIndexList,
+						.dynamic_values = ArrayList(protocol.BattleBuff.DynamicValuesEntry).init(allocator),
+					};
+
+					try buff.dynamic_values.append(.{ .key = .{ .Const = "SkillIndex" }, .value = 0 });
+					try battle.buff_list.append(buff);
+				}
+			}
+
+			if (buffedAvatarId == 1006 or buffedAvatarId == 1308 or buffedAvatarId == 1317) {
+				var buff_tough = BattleBuff{
+					.id = 1000119, //for is_ignore toughness
+					.level = 1,
+					.owner_id = @intCast(idx),
+					.wave_flag = 1,
+					.target_index_list = targetIndexList,
+					.dynamic_values = ArrayList(protocol.BattleBuff.DynamicValuesEntry).init(allocator),
+				};
+				try buff_tough.dynamic_values.append(.{ .key = .{ .Const = "SkillIndex" }, .value = 0 });
+				try battle.buff_list.append(buff_tough);
+			}
+			
+			if (buffedAvatarId == 1310) {
+				var buff_firefly = BattleBuff{
+					.id = 1000112, //for firefly tech
+					.level = 1,
+					.owner_id = @intCast(idx),
+					.wave_flag = 1,
+					.target_index_list = targetIndexList,
+					.dynamic_values = ArrayList(protocol.BattleBuff.DynamicValuesEntry).init(allocator),
+				};
+				try buff_firefly.dynamic_values.append(.{ .key = .{ .Const = "SkillIndex" }, .value = 0 });
+				try battle.buff_list.append(buff_firefly);
+			}
+		}
         try battle.pve_avatar_list.append(avatar);
     }
 
@@ -117,7 +164,7 @@ pub fn onStartCocoonStage(session: *Session, packet: *const Packet, allocator: A
 
     switch (battle.stage_id) {
         // PF
-        30019000...30019100, 30021000...30021100, 30301000...30307000 => {
+        30019000...30019100, 30021000...30021100, 30301000...30309000 => {
             try battle.battle_target_info.append(.{ .key = 1, .value = pfTargetHead });
             // fill blank target
             for (2..5) |i| {

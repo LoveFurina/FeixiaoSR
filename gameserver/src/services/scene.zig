@@ -10,10 +10,11 @@ const log = std.log.scoped(.scene_service);
 pub fn onGetCurSceneInfo(session: *Session, _: *const Packet, allocator: Allocator) !void {
     var scene_info = protocol.SceneInfo.init(allocator);
     //scene_info.JDEFJHMIGII = 1;
+    //scene_info.leader_entity_id = 1;
     scene_info.game_mode_type = 2;
-    scene_info.plane_id = 20232;
-    scene_info.floor_id = 20232001;
-    scene_info.entry_id = 2023201;
+    scene_info.plane_id = 20231;
+    scene_info.floor_id = 20231001;
+    scene_info.entry_id = 2023101;
 
         { // Character
         var scene_group = protocol.SceneEntityGroupInfo.init(allocator);
@@ -29,7 +30,7 @@ pub fn onGetCurSceneInfo(session: *Session, _: *const Packet, allocator: Allocat
                 .uid = 666,
                 .map_layer = 2,
             },
-            .Motion = .{ .pos = .{ .x = 378989, .y = 31416, .z = 9556 }, .rot = .{} },
+            .Motion = .{ .pos = .{ .x = 68806, .y = 69528, .z = -225384 }, .rot = .{} },
         });
 
         try scene_info.entity_group_list.append(scene_group);
@@ -38,22 +39,23 @@ pub fn onGetCurSceneInfo(session: *Session, _: *const Packet, allocator: Allocat
     { // Calyx prop
         var scene_group = protocol.SceneEntityGroupInfo.init(allocator);
         scene_group.state = 1;
-        scene_group.group_id = 129;
+        scene_group.group_id = 55;
 
         var prop = protocol.ScenePropInfo.init(allocator);
-        prop.quest_prop_id = 808;
+		//calyx prop 808 = yellow 801 = red 113 = boss 702 = stagnant shadow
+        prop.quest_prop_id = 801;
         prop.prop_state = 1;
 
         try scene_group.entity_list.append(.{
-            .GroupId = 129,
+            .GroupId = 55,
             .InstId = 300001,
             .EntityId = 1337,
             .Prop = prop,
-            .Motion = .{ .pos = .{ .x = 373505, .y = 31426, .z = 9512 }, .rot = .{} },
+            .Motion = .{ .pos = .{ .x = 68806, .y = 68528, .z = -225384 }, .rot = .{ .x = 0, .y = 133224, .z = 0 } },
         });
 
         try scene_info.entity_group_list.append(scene_group);
-    }
+}
 
     { // NPC
         var scene_group = protocol.SceneEntityGroupInfo.init(allocator);

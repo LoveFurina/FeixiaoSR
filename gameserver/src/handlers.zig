@@ -74,6 +74,12 @@ const DummyCmdList = [_]struct { CmdID, CmdID }{
     .{ CmdID.CmdGetLevelRewardTakenListCsReq, CmdID.CmdGetLevelRewardTakenListScRsp },
     .{ CmdID.CmdGetMainMissionCustomValueCsReq, CmdID.CmdGetMainMissionCustomValueScRsp },
     .{ CmdID.CmdRelicRecommendCsReq, CmdID.CmdRelicRecommendScRsp },
+    .{ CmdID.CmdGetSceneMapInfoCsReq, CmdID.CmdGetSceneMapInfoScRsp },
+    .{ CmdID.CmdGetFirstTalkNpcCsReq, CmdID.CmdGetFirstTalkNpcScRsp },
+    .{ CmdID.CmdGetMaterialSubmitActivityDataCsReq, CmdID.CmdGetMaterialSubmitActivityDataScRsp },
+    .{ CmdID.CmdRogueTournGetCurRogueCocoonInfoCsReq, CmdID.CmdRogueTournGetCurRogueCocoonInfoScRsp },
+    .{ CmdID.CmdRogueMagicQueryCsReq, CmdID.CmdRogueMagicQueryScRsp },
+    .{ CmdID.CmdMusicRhythmDataCsReq, CmdID.CmdMusicRhythmDataScRsp },
 };
 
 const SuppressLogList = [_]CmdID{CmdID.CmdSceneEntityMoveCsReq};

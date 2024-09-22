@@ -10,9 +10,9 @@ pub fn onGetCurLineupData(session: *Session, _: *const Packet, allocator: Alloca
     const config = try Config.configLoader(allocator, "config.json");
 
     var lineup = protocol.LineupInfo.init(allocator);
-    lineup.CPGDHGKAHHD = 5;
-    lineup.plane_id = 5;
-    lineup.leader_slot = 0;
+    //lineup.CPGDHGKAHHD = 5;
+    //lineup.plane_id = 5;
+    //lineup.leader_slot = 0;
     lineup.mp = 5;
     lineup.max_mp= 5;
     lineup.name = .{ .Const = "YunliSR" };
@@ -75,3 +75,13 @@ pub fn onReplaceLineup(session: *Session, packet: *const Packet, allocator: Allo
         .retcode = 0,
     });
 }
+pub fn onSetLineupName(session: *Session, packet: *const Packet, allocator: Allocator) !void {
+    const req = try packet.getProto(protocol.SetLineupNameCsReq, allocator);
+
+    try session.send(CmdID.CmdSetLineupNameScRsp, protocol.SetLineupNameScRsp{
+        .index = req.index,
+        .name = req.name,
+        .retcode = 0,
+    });
+}
+																				  
